@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Materi Visual - PahamFin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#2563EB',
+                        secondary: '#10B981',
+                        accent: '#FACC15',
+                        bg: '#F9FAFB',
+                        textMain: '#1F2937',
+                        textLight: '#6B7280'
+                    },
+                    fontFamily: {
+                        sans: ['Open Sans', 'sans-serif'],
+                        heading: ['Poppins', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .hover-zoom { transition: transform 0.3s ease; }
+        .hover-zoom:hover { transform: scale(1.02); }
+    </style>
+</head>
+<body class="bg-bg text-textMain font-sans antialiased flex flex-col min-h-screen">
+
+    <nav class="bg-white/80 backdrop-blur-md fixed w-full z-50 shadow-sm border-b border-gray-100 h-20">
+        <div class="max-w-7xl mx-auto px-4 h-full flex justify-between items-center">
+            <a href="index.html" class="flex items-center gap-2">
+                <div class="w-10 h-10 bg-primary rounded-lg flex items-center justify-center text-white text-xl font-bold shadow-lg">
+                    <i class="fa-solid fa-chart-line"></i>
+                </div>
+                <span class="font-heading font-bold text-2xl text-primary">PahamFin</span>
+            </a>
+            <a href="index.html" class="font-bold text-primary hover:underline flex items-center gap-2">
+                <i class="fa-solid fa-arrow-left"></i> Kembali ke Home
+            </a>
+        </div>
+    </nav>
+
+    <div class="pt-28 pb-12 max-w-7xl mx-auto px-4 flex-grow">
+        
+        <div id="video" class="bg-white rounded-3xl p-8 shadow-sm border border-gray-100 mb-16 scroll-mt-28">
+            <h2 class="font-heading text-3xl font-bold text-gray-900 mb-6 flex items-center gap-3">
+                <span class="bg-purple-100 text-purple-600 w-10 h-10 rounded-full flex items-center justify-center text-xl"><i class="fa-solid fa-play"></i></span>
+                Video Edukasi Pilihan
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="bg-bg rounded-xl overflow-hidden shadow-sm hover:shadow-md transition">
+                    <div class="aspect-video">
+                        <iframe class="w-full h-full" src="https://www.youtube.com/embed/b-56f8e6tUk" title="Apa Itu Fintech?" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </div>
+                    <div class="p-4">
+                        <h4 class="font-bold text-gray-900">Apa Itu Fintech? Pengenalan Dasar</h4>
+                        <p class="text-xs text-textLight mt-1">Materi dasar untuk pemula.</p>
+                    </div>
+                </div>
+                
+                <div class="bg-bg rounded-xl overflow-hidden shadow-sm hover:shadow-md transition">
+                    <div class="aspect-video">
+                        <iframe class="w-full h-full" src="https://www.youtube.com/embed/x54QUmlJZuw" title="Jenis Fintech" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </div>
+                    <div class="p-4">
+                        <h4 class="font-bold text-gray-900">5 Jenis Fintech & Izin OJK</h4>
+                        <p class="text-xs text-textLight mt-1">Perbedaan fintech terdaftar dan berizin.</p>
+                    </div>
+                </div>
+
+                <div class="bg-bg rounded-xl overflow-hidden shadow-sm hover:shadow-md transition">
+                    <div class="aspect-video">
+                        <iframe class="w-full h-full" src="https://www.youtube.com/embed/hdWuBUqhkyw" title="P2P vs Crowdfunding" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </div>
+                    <div class="p-4">
+                        <h4 class="font-bold text-gray-900">P2P Lending vs Crowdfunding</h4>
+                        <p class="text-xs text-textLight mt-1">Memahami perbedaan dua model pendanaan.</p>
+                    </div>
+                </div>
+
+                <div class="bg-bg rounded-xl overflow-hidden shadow-sm hover:shadow-md transition">
+                    <div class="aspect-video">
+                        <iframe class="w-full h-full" src="https://www.youtube.com/embed/KtFdfjJflSc" title="Crowdfunding" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </div>
+                    <div class="p-4">
+                        <h4 class="font-bold text-gray-900">Apa Itu Crowdfunding?</h4>
+                        <p class="text-xs text-textLight mt-1">Konsep urun dana dalam ekonomi digital.</p>
+                    </div>
+                </div>
+
+                <div class="bg-bg rounded-xl overflow-hidden shadow-sm hover:shadow-md transition">
+                    <div class="aspect-video">
+                        <iframe class="w-full h-full" src="https://www.youtube.com/embed/RDDCtqvylMc" title="Waspada Pinjol" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </div>
+                    <div class="p-4">
+                        <h4 class="font-bold text-gray-900">Waspada Pinjol Ilegal</h4>
+                        <p class="text-xs text-textLight mt-1">Tips keamanan dan menghindari penipuan.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="infografis" class="scroll-mt-28">
+            <div class="text-center mb-10">
+                <h2 class="font-heading text-3xl font-bold text-gray-900 mb-4 inline-flex items-center gap-3">
+                    <span class="bg-green-100 text-secondary w-10 h-10 rounded-full flex items-center justify-center text-xl"><i class="fa-solid fa-images"></i></span>
+                    Galeri Infografis
+                </h2>
+                <p class="text-textLight max-w-2xl mx-auto">
+                    Klik gambar untuk melihat ukuran penuh atau unduh untuk disimpan.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="bg-white rounded-2xl p-4 shadow-sm border border-gray-100 hover:shadow-lg transition-all group flex flex-col h-full">
+                    <div class="relative overflow-hidden rounded-xl bg-gray-100 mb-4 cursor-pointer border border-gray-200 flex-grow">
+                        <img src="img/1.png" alt="Infografis Apa Itu Fintech" class="w-full h-full object-cover hover-zoom" onclick="window.open(this.src, '_blank')">
+                        <div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition pointer-events-none"></div>
+                        <div class="absolute bottom-3 right-3 bg-white/90 backdrop-blur text-xs font-bold px-2 py-1 rounded shadow text-gray-700">
+                            <i class="fa-solid fa-magnifying-glass-plus"></i> Zoom
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="font-heading font-bold text-lg text-gray-900 mb-1">1. Pengenalan Fintech</h3>
+                        <p class="text-xs text-textLight mb-4">Definisi, evolusi sejarah, dan ekosistem pendukung.</p>
+                        <a href="img/1.png" download class="block w-full py-2.5 bg-blue-50 text-primary font-bold text-center rounded-lg hover:bg-primary hover:text-white transition text-sm">
+                            <i class="fa-solid fa-download mr-2"></i> Download HD
+                        </a>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-2xl p-4 shadow-sm border border-gray-100 hover:shadow-lg transition-all group flex flex-col h-full">
+                    <div class="relative overflow-hidden rounded-xl bg-gray-100 mb-4 cursor-pointer border border-gray-200 flex-grow">
+                        <img src="img/2.png" alt="Infografis Jenis Fintech" class="w-full h-full object-cover hover-zoom" onclick="window.open(this.src, '_blank')">
+                        <div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition pointer-events-none"></div>
+                        <div class="absolute bottom-3 right-3 bg-white/90 backdrop-blur text-xs font-bold px-2 py-1 rounded shadow text-gray-700">
+                            <i class="fa-solid fa-magnifying-glass-plus"></i> Zoom
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="font-heading font-bold text-lg text-gray-900 mb-1">2. Jenis-Jenis Fintech</h3>
+                        <p class="text-xs text-textLight mb-4">Penjelasan 10 jenis layanan fintech di Indonesia.</p>
+                        <a href="img/2.png" download class="block w-full py-2.5 bg-green-50 text-secondary font-bold text-center rounded-lg hover:bg-secondary hover:text-white transition text-sm">
+                            <i class="fa-solid fa-download mr-2"></i> Download HD
+                        </a>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-2xl p-4 shadow-sm border border-gray-100 hover:shadow-lg transition-all group flex flex-col h-full">
+                    <div class="relative overflow-hidden rounded-xl bg-gray-100 mb-4 cursor-pointer border border-gray-200 flex-grow">
+                        <img src="img/3.png" alt="Infografis Keamanan Digital" class="w-full h-full object-cover hover-zoom" onclick="window.open(this.src, '_blank')">
+                        <div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition pointer-events-none"></div>
+                        <div class="absolute bottom-3 right-3 bg-white/90 backdrop-blur text-xs font-bold px-2 py-1 rounded shadow text-gray-700">
+                            <i class="fa-solid fa-magnifying-glass-plus"></i> Zoom
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="font-heading font-bold text-lg text-gray-900 mb-1">3. Keamanan & Privasi</h3>
+                        <p class="text-xs text-textLight mb-4">Pentingnya keamanan digital, ancaman siber, dan peran pengguna.</p>
+                        <a href="img/3.png" download class="block w-full py-2.5 bg-orange-50 text-orange-600 font-bold text-center rounded-lg hover:bg-orange-500 hover:text-white transition text-sm">
+                            <i class="fa-solid fa-download mr-2"></i> Download HD
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <footer class="bg-[#0F172A] text-gray-300 py-8 border-t border-gray-800 text-center text-sm mt-auto">
+        <p>&copy; 2024 PahamFin. Dibuat untuk tujuan edukasi.</p>
+    </footer>
+
+</body>
+</html>

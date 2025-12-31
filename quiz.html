@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kuis Finansial - PahamFin</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#2563EB',
+                        secondary: '#10B981',
+                        accent: '#FACC15',
+                        bg: '#F9FAFB',
+                        textMain: '#1F2937',
+                        wrong: '#EF4444',
+                    },
+                    fontFamily: {
+                        sans: ['Open Sans', 'sans-serif'],
+                        heading: ['Poppins', 'sans-serif'],
+                    },
+                    animation: {
+                        'bounce-short': 'bounce 0.5s ease-in-out 1',
+                        'shake': 'shake 0.5s cubic-bezier(.36,.07,.19,.97) both',
+                        'pop': 'pop 0.3s ease-out forwards',
+                    },
+                    keyframes: {
+                        shake: {
+                            '10%, 90%': { transform: 'translate3d(-1px, 0, 0)' },
+                            '20%, 80%': { transform: 'translate3d(2px, 0, 0)' },
+                            '30%, 50%, 70%': { transform: 'translate3d(-4px, 0, 0)' },
+                            '40%, 60%': { transform: 'translate3d(4px, 0, 0)' }
+                        },
+                        pop: {
+                            '0%': { transform: 'scale(0.9)', opacity: '0' },
+                            '100%': { transform: 'scale(1)', opacity: '1' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .option-card {
+            transition: all 0.2s;
+        }
+        .option-card:hover:not(.disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+        .disabled {
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    </style>
+</head>
+<body class="bg-bg text-textMain font-sans antialiased min-h-screen flex flex-col">
+
+    <nav class="bg-white fixed w-full z-50 shadow-sm h-20">
+        <div class="max-w-7xl mx-auto px-4 h-full flex justify-between items-center">
+            <a href="index.html" class="flex items-center gap-2">
+                <div class="w-10 h-10 bg-primary rounded-lg flex items-center justify-center text-white text-xl font-bold shadow-lg">
+                    <i class="fa-solid fa-gamepad"></i>
+                </div>
+                <span class="font-heading font-bold text-2xl text-primary">PahamFin Quiz</span>
+            </a>
+            <a href="index.html" class="text-gray-500 hover:text-primary font-bold transition flex items-center gap-2">
+                <i class="fa-solid fa-right-from-bracket"></i> Keluar
+            </a>
+        </div>
+    </nav>
+
+    <main class="flex-grow pt-24 pb-12 px-4 flex items-center justify-center relative overflow-hidden">
+        
+        <div class="absolute top-20 left-10 w-32 h-32 bg-blue-200 rounded-full blur-3xl opacity-30 animate-pulse"></div>
+        <div class="absolute bottom-20 right-10 w-40 h-40 bg-yellow-200 rounded-full blur-3xl opacity-30 animate-pulse" style="animation-delay: 1s;"></div>
+
+        <div class="w-full max-w-4xl relative z-10">
+
+<div id="lobby-screen" class="text-center animate-pop">
+                <h1 class="font-heading text-4xl md:text-5xl font-extrabold text-gray-900 mb-4">Uji Wawasan Finansialmu</h1>
+                <p class="text-textLight text-lg mb-12 max-w-2xl mx-auto">Pilih tingkat kesulitan untuk memulai tantangan. Semakin tinggi level, semakin besar poin yang didapat!</p>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <button onclick="startQuiz('easy')" class="group bg-white p-8 rounded-3xl border-2 border-transparent hover:border-green-400 shadow-lg hover:shadow-green-100 transition-all transform hover:-translate-y-2 relative overflow-hidden">
+                        <div class="absolute top-0 right-0 bg-green-100 text-green-600 text-xs font-bold px-3 py-1 rounded-bl-xl">x1 Poin</div>
+                        <div class="w-20 h-20 bg-green-50 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform">
+                            <span class="text-4xl">🌱</span>
+                        </div>
+                        <h3 class="font-heading font-bold text-xl mb-2 text-gray-800">Pemula</h3>
+                        <p class="text-sm text-gray-500 leading-relaxed">
+                            Definisi Fintech, peran OJK, dan pengenalan layanan dasar seperti E-Wallet & Crowdfunding.
+                        </p>
+                    </button>
+
+                    <button onclick="startQuiz('medium')" class="group bg-white p-8 rounded-3xl border-2 border-transparent hover:border-blue-400 shadow-lg hover:shadow-blue-100 transition-all transform hover:-translate-y-2 relative overflow-hidden">
+                        <div class="absolute top-0 right-0 bg-blue-100 text-blue-600 text-xs font-bold px-3 py-1 rounded-bl-xl">x2 Poin</div>
+                        <div class="w-20 h-20 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform">
+                            <span class="text-4xl">🚀</span>
+                        </div>
+                        <h3 class="font-heading font-bold text-xl mb-2 text-gray-800">Menengah</h3>
+                        <p class="text-sm text-gray-500 leading-relaxed">
+                            Mekanisme kerja Fintech, keamanan data (Enkripsi), dan jenis layanan spesifik seperti Payment Gateway.
+                        </p>
+                    </button>
+
+                    <button onclick="startQuiz('hard')" class="group bg-white p-8 rounded-3xl border-2 border-transparent hover:border-purple-400 shadow-lg hover:shadow-purple-100 transition-all transform hover:-translate-y-2 relative overflow-hidden">
+                        <div class="absolute top-0 right-0 bg-purple-100 text-purple-600 text-xs font-bold px-3 py-1 rounded-bl-xl">x3 Poin</div>
+                        <div class="w-20 h-20 bg-purple-50 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform">
+                            <span class="text-4xl">💎</span>
+                        </div>
+                        <h3 class="font-heading font-bold text-xl mb-2 text-gray-800">Ahli</h3>
+                        <p class="text-sm text-gray-500 leading-relaxed">
+                            Regulasi mendalam (POJK & UU), analisis risiko siber, dan ekosistem digital.
+                        </p>
+                    </button>
+                </div>
+            </div>
+
+            <div id="quiz-screen" class="hidden max-w-2xl mx-auto">
+                <div class="flex justify-between items-center mb-6 bg-white p-4 rounded-2xl shadow-sm border border-gray-100">
+                    <div class="flex items-center gap-3">
+                        <span id="level-badge" class="px-3 py-1 rounded-lg text-xs font-bold uppercase tracking-wider bg-gray-100 text-gray-600">LEVEL</span>
+                        <div class="w-full bg-gray-200 rounded-full h-2.5 w-24 md:w-32">
+                            <div id="progress-bar" class="bg-primary h-2.5 rounded-full transition-all duration-500" style="width: 0%"></div>
+                        </div>
+                        <span id="question-count" class="text-xs font-bold text-gray-500">1/5</span>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-xs text-gray-400 uppercase font-bold">Skor</p>
+                        <p id="score-display" class="font-heading font-black text-2xl text-primary leading-none">0</p>
+                    </div>
+                </div>
+
+                <div id="streak-badge" class="hidden text-center mb-4 animate-bounce">
+                    <span class="bg-orange-100 text-orange-600 px-4 py-1 rounded-full text-xs font-bold border border-orange-200">
+                        🔥 <span id="streak-count">0</span>x Combo Streak!
+                    </span>
+                </div>
+
+                <div class="bg-white rounded-3xl p-8 shadow-lg border-b-4 border-gray-200 relative overflow-hidden">
+                    <h2 id="question-text" class="font-heading text-2xl font-bold text-gray-800 mb-8 leading-relaxed">
+                        Loading Question...
+                    </h2>
+
+                    <div id="options-container" class="grid grid-cols-1 gap-4">
+                        </div>
+
+                    <div id="feedback-area" class="hidden mt-6 p-4 rounded-xl border-l-4 animate-pop">
+                        <h4 id="feedback-title" class="font-bold text-lg mb-1"></h4>
+                        <p id="feedback-text" class="text-sm opacity-90"></p>
+                    </div>
+
+                    <div class="mt-8 text-right">
+                        <button id="next-btn" onclick="nextQuestion()" class="hidden px-8 py-3 bg-primary text-white font-bold rounded-xl shadow-lg shadow-blue-500/30 hover:bg-blue-700 transition active:scale-95">
+                            Lanjut <i class="fa-solid fa-arrow-right ml-2"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="result-screen" class="hidden text-center max-w-lg mx-auto bg-white p-10 rounded-3xl shadow-2xl border border-gray-100 animate-pop">
+                <div id="result-icon" class="text-8xl mb-6 animate-bounce-short">🏆</div>
+                <h2 class="font-heading text-3xl font-extrabold text-gray-900 mb-2">Kuis Selesai!</h2>
+                <p id="result-message" class="text-textLight mb-8">Kerja bagus menyelesaikan tantangan ini.</p>
+
+                <div class="bg-blue-50 rounded-2xl p-6 mb-8 border border-blue-100">
+                    <p class="text-sm text-blue-600 uppercase font-bold tracking-widest mb-1">Total Skor</p>
+                    <p id="final-score" class="font-heading text-6xl font-black text-primary">0</p>
+                    <div class="flex justify-center gap-4 mt-4 text-sm font-semibold text-gray-600">
+                        <span>✅ <span id="total-correct">0</span> Benar</span>
+                        <span>❌ <span id="total-wrong">0</span> Salah</span>
+                    </div>
+                </div>
+
+                <div class="flex flex-col gap-3">
+                    <button onclick="resetQuiz()" class="w-full py-3 bg-primary text-white font-bold rounded-xl hover:bg-blue-700 transition shadow-lg">
+                        Main Lagi
+                    </button>
+                    <a href="index.html" class="w-full py-3 bg-white text-gray-700 border-2 border-gray-200 font-bold rounded-xl hover:border-gray-400 transition">
+                        Kembali ke Home
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <script>
+        // --- DATA SOAL (DISESUAIKAN DENGAN MODUL 1-4) ---
+        const quizData = {
+            easy: [
+                {
+                    q: "Apa definisi dasar dari Fintech?",
+                    options: ["Bank konvensional cabang baru", "Inovasi jasa keuangan berbasis teknologi", "Mata uang digital", "Aplikasi media sosial"],
+                    correct: 1,
+                    desc: "Fintech (Financial Technology) adalah inovasi sektor jasa keuangan yang memanfaatkan teknologi digital."
+                },
+                {
+                    q: "Apa kepanjangan dari OJK?",
+                    options: ["Otoritas Jasa Keuangan", "Organisasi Jaminan Kredit", "Otoritas Jaga Keuangan", "Operasional Jasa Kas"],
+                    correct: 0,
+                    desc: "OJK (Otoritas Jasa Keuangan) adalah lembaga yang mengatur dan mengawasi sektor jasa keuangan."
+                },
+                {
+                    q: "Layanan penggalangan dana massal untuk suatu proyek disebut?",
+                    options: ["Micro Financing", "Crowdfunding", "P2P Lending", "Insurtech"],
+                    correct: 1,
+                    desc: "Crowdfunding memanfaatkan kekuatan kolektif masyarakat untuk mendanai proyek atau usaha."
+                },
+                {
+                    q: "Aplikasi seperti GoPay dan OVO termasuk jenis fintech apa?",
+                    options: ["Digital Payment System", "Insurtech", "Market Comparison", "Crowdfunding"],
+                    correct: 0,
+                    desc: "Dompet digital seperti GoPay/OVO adalah contoh Digital Payment System untuk transaksi non-tunai."
+                },
+                {
+                    q: "Apa fokus utama dari 'Insurtech'?",
+                    options: ["Investasi Saham", "Pinjaman Online", "Layanan Asuransi", "Pengiriman Uang"],
+                    correct: 2,
+                    desc: "Insurtech adalah inovasi teknologi dalam sektor asuransi untuk mempermudah pembelian polis hingga klaim."
+                },
+                {
+                    q: "Manakah yang BUKAN merupakan tujuan fintech?",
+                    options: ["Meningkatkan inklusi keuangan", "Mempercepat layanan", "Mempersulit akses kredit", "Mendorong transparansi"],
+                    correct: 2,
+                    desc: "Fintech justru bertujuan mempermudah akses keuangan (inklusi), bukan mempersulitnya."
+                },
+                {
+                    q: "Fitur keamanan untuk memastikan hanya pengguna asli yang akses akun adalah?",
+                    options: ["Enkripsi", "Otentikasi & Verifikasi", "Phishing", "Regulasi"],
+                    correct: 1,
+                    desc: "Otentikasi (seperti Password/PIN/Biometrik) memverifikasi identitas pengguna."
+                },
+                {
+                    q: "Platform 'Kitabisa' adalah contoh dari jenis fintech?",
+                    options: ["P2P Lending", "Crowdfunding Donasi", "Payment Gateway", "Manajemen Aset"],
+                    correct: 1,
+                    desc: "Kitabisa memfasilitasi penggalangan dana sosial (Crowdfunding) berbasis donasi."
+                },
+                {
+                    q: "Apa keunggulan utama Fintech dibanding Bank Tradisional?",
+                    options: ["Jaringan fisik luas", "Stabilitas modal tinggi", "Kecepatan dan kemudahan", "Regulasi lebih ketat"],
+                    correct: 2,
+                    desc: "Keunggulan utama fintech adalah fleksibilitas, kecepatan, dan kemudahan akses layanan (User Experience)."
+                },
+                {
+                    q: "Nomor kontak resmi layanan konsumen OJK adalah?",
+                    options: ["110", "157", "119", "123"],
+                    correct: 1,
+                    desc: "Kontak 157 adalah saluran resmi OJK untuk pengaduan dan pengecekan legalitas."
+                }
+            ],
+            medium: [
+                {
+                    q: "Apa peran 'Payment Gateway' dalam e-commerce?",
+                    options: ["Menyediakan barang", "Mengirim paket", "Penghubung sistem pembayaran", "Memberi pinjaman"],
+                    correct: 2,
+                    desc: "Payment Gateway mengelola otorisasi dan verifikasi pembayaran antara penjual dan pembeli."
+                },
+                {
+                    q: "Apa itu 'Regulatory Sandbox' dalam peraturan OJK?",
+                    options: ["Kotak saran nasabah", "Mekanisme uji coba terbatas inovasi", "Sanksi bagi fintech ilegal", "Aplikasi permainan"],
+                    correct: 1,
+                    desc: "Regulatory Sandbox adalah ruang uji coba terbatas bagi inovasi baru sebelum mendapat izin penuh."
+                },
+                {
+                    q: "Fintech 'Micro Financing' ditujukan untuk siapa?",
+                    options: ["Perusahaan multinasional", "Pelaku usaha mikro & masyarakat berpenghasilan rendah", "Investor asing", "Pemerintah"],
+                    correct: 1,
+                    desc: "Micro Financing fokus pada pembiayaan skala kecil untuk UMKM atau individu yang unbankable."
+                },
+                {
+                    q: "Teknologi apa yang mengubah data menjadi kode acak agar aman?",
+                    options: ["Enkripsi", "Algoritma", "Biometrik", "Cloud Computing"],
+                    correct: 0,
+                    desc: "Enkripsi mengubah data menjadi format yang tidak dapat dibaca tanpa kunci khusus."
+                },
+                {
+                    q: "Apa fungsi dari 'Market Comparison' fintech?",
+                    options: ["Memberi pinjaman langsung", "Membandingkan produk keuangan", "Menjual saham", "Mengelola aset negara"],
+                    correct: 1,
+                    desc: "Market Comparison (seperti CekAja) membantu pengguna membandingkan biaya dan manfaat berbagai produk."
+                },
+                {
+                    q: "Apa perbedaan P2P Lending dengan Crowdfunding?",
+                    options: ["Tidak ada bedanya", "P2P berbasis hutang/pinjaman, Crowdfunding berbasis dukungan/ekuitas", "Crowdfunding hanya untuk bank", "P2P tidak pakai teknologi"],
+                    correct: 1,
+                    desc: "P2P Lending adalah pinjam-meminjam, sedangkan Crowdfunding adalah penggalangan dana kolektif."
+                },
+                {
+                    q: "UU yang mengatur perlindungan data pribadi pengguna adalah?",
+                    options: ["UU ITE", "UU PDP (Perlindungan Data Pribadi)", "UU OJK", "UU Perbankan"],
+                    correct: 1,
+                    desc: "UU No. 27 Tahun 2022 tentang Perlindungan Data Pribadi (UU PDP) mengatur pengelolaan data pengguna."
+                },
+                {
+                    q: "Apa risiko utama menggunakan Fintech Ilegal?",
+                    options: ["Bunga rendah", "Data pribadi tidak aman & penagihan kasar", "Proses terlalu lama", "Diawasi pemerintah"],
+                    correct: 1,
+                    desc: "Fintech ilegal tidak patuh regulasi, berisiko menyalahgunakan data dan melakukan penagihan tidak etis."
+                },
+                {
+                    q: "Layanan 'Remitansi' fokus pada?",
+                    options: ["Pengiriman uang lintas wilayah/negara", "Pembelian pulsa", "Pinjaman modal", "Asuransi kesehatan"],
+                    correct: 0,
+                    desc: "Remitansi adalah layanan transfer dana (pengiriman uang), sering digunakan pekerja migran."
+                },
+                {
+                    q: "Platform seperti 'Bibit' atau 'Bareksa' termasuk jenis?",
+                    options: ["Fintech Pembayaran", "Fintech Manajemen Aset/Investasi", "P2P Lending", "Insurtech"],
+                    correct: 1,
+                    desc: "Mereka menyediakan layanan investasi reksa dana secara digital (Manajemen Aset)."
+                }
+            ],
+            hard: [
+                {
+                    q: "POJK No. 77/POJK.01/2016 secara khusus mengatur tentang?",
+                    options: ["Perbankan Digital", "Layanan Pinjam Meminjam (P2P Lending)", "Dompet Digital", "Asuransi Online"],
+                    correct: 1,
+                    desc: "POJK 77/2016 adalah regulasi dasar untuk penyelenggaraan layanan P2P Lending di Indonesia."
+                },
+                {
+                    q: "Dalam P2P Lending, platform berposisi sebagai?",
+                    options: ["Pemberi Dana (Lender)", "Peminjam (Borrower)", "Perantara/Penyelenggara Sistem", "Penjamin Dana"],
+                    correct: 2,
+                    desc: "Platform P2P hanya perantara yang mempertemukan Lender dan Borrower, bukan pemilik dana."
+                },
+                {
+                    q: "Apa nama pusat penanganan penipuan yang diluncurkan OJK?",
+                    options: ["IASC (Indonesia Anti-Scam Centre)", "KPK", "Satgas Waspada Investasi", "Cyber Crime Polri"],
+                    correct: 0,
+                    desc: "IASC adalah inisiatif baru untuk menangani laporan penipuan keuangan secara terintegrasi."
+                },
+                {
+                    q: "Serangan siber yang memanipulasi psikologis korban untuk mendapat data disebut?",
+                    options: ["Malware", "Social Engineering", "DDoS", "Hacking"],
+                    correct: 1,
+                    desc: "Social Engineering (Rekayasa Sosial) memanipulasi kelengahan manusia, bukan menjebol sistem teknis."
+                },
+                {
+                    q: "Apa dampak dari UU ITE (Informasi & Transaksi Elektronik) bagi fintech?",
+                    options: ["Melarang fintech", "Mengatur keabsahan transaksi elektronik", "Menghapus pajak digital", "Mengganti mata uang"],
+                    correct: 1,
+                    desc: "UU ITE memberikan kepastian hukum bahwa kontrak/transaksi digital sah dan mengikat."
+                },
+                {
+                    q: "Fase 'Akselerasi Digital' fintech di Indonesia dipicu oleh peristiwa apa?",
+                    options: ["Krisis 1998", "Pandemi COVID-19 (2020)", "Peluncuran ATM", "Masuknya 4G"],
+                    correct: 1,
+                    desc: "Pandemi memaksa adopsi layanan digital (nontunai/online) secara masif dalam waktu singkat."
+                },
+                {
+                    q: "Apa prinsip 'Transparency' dalam perlindungan konsumen fintech?",
+                    options: ["Data boleh dijual", "Biaya dan risiko harus diinfokan jelas", "Tanpa bunga", "Identitas anonim"],
+                    correct: 1,
+                    desc: "Konsumen berhak tahu rincian biaya, bunga, denda, dan risiko sebelum setuju menggunakan layanan."
+                },
+                {
+                    q: "Mengapa kolaborasi Bank dan Fintech dianggap strategis?",
+                    options: ["Bank ingin membeli fintech", "Saling melengkapi (Trust Bank + Kecepatan Fintech)", "Fintech akan bangkrut", "Bank kehabisan uang"],
+                    correct: 1,
+                    desc: "Bank punya modal/trust, Fintech punya teknologi/agility. Kolaborasi memperkuat ekosistem."
+                },
+                {
+                    q: "Salah satu indikator fintech legal dalam hal identitas adalah?",
+                    options: ["Alamat kantor tidak jelas", "Hanya komunikasi via WA", "Identitas pengurus dan alamat jelas terverifikasi", "Server di luar negeri"],
+                    correct: 2,
+                    desc: "Fintech legal wajib mencantumkan alamat kantor fisik dan identitas pengurus yang jelas."
+                },
+                {
+                    q: "Apa peran Bank Indonesia dalam ekosistem fintech?",
+                    options: ["Mengawasi pasar modal", "Mengatur sistem pembayaran nasional", "Menangkap penipu", "Memberi izin P2P Lending"],
+                    correct: 1,
+                    desc: "BI fokus mengatur kelancaran dan keamanan Sistem Pembayaran (seperti QRIS, E-Wallet), sedangkan OJK mengawasi jasa keuangan (P2P, Investasi)."
+                }
+            ]
+        };
+
+        // --- GAME STATE ---
+        let currentLevel = 'easy';
+        let currentQuestions = [];
+        let questionIndex = 0;
+        let score = 0;
+        let streak = 0;
+        let correctCount = 0;
+        let wrongCount = 0;
+        let pointMultiplier = 1;
+        
+        // Timer Variables
+        let timeLeft = 30;
+        let timerInterval;
+
+        // --- DOM ELEMENTS ---
+        const lobbyScreen = document.getElementById('lobby-screen');
+        const quizScreen = document.getElementById('quiz-screen');
+        const resultScreen = document.getElementById('result-screen');
+        const questionText = document.getElementById('question-text');
+        const optionsContainer = document.getElementById('options-container');
+        const feedbackArea = document.getElementById('feedback-area');
+        const feedbackTitle = document.getElementById('feedback-title');
+        const feedbackText = document.getElementById('feedback-text');
+        const nextBtn = document.getElementById('next-btn');
+        const scoreDisplay = document.getElementById('score-display');
+        const progressBar = document.getElementById('progress-bar');
+        const questionCount = document.getElementById('question-count');
+        const levelBadge = document.getElementById('level-badge');
+        const streakBadge = document.getElementById('streak-badge');
+        const streakCount = document.getElementById('streak-count');
+
+        // --- FUNCTIONS ---
+
+        function startQuiz(level) {
+            currentLevel = level;
+            currentQuestions = [...quizData[level]]; // Copy array
+            
+            // Set Multiplier based on level
+            if (level === 'easy') pointMultiplier = 100;
+            if (level === 'medium') pointMultiplier = 200;
+            if (level === 'hard') pointMultiplier = 300;
+
+            // UI Update
+            if (level === 'easy') { levelBadge.className = "px-3 py-1 rounded-lg text-xs font-bold uppercase tracking-wider bg-green-100 text-green-700"; levelBadge.innerText = "PEMULA"; }
+            if (level === 'medium') { levelBadge.className = "px-3 py-1 rounded-lg text-xs font-bold uppercase tracking-wider bg-blue-100 text-blue-700"; levelBadge.innerText = "MENENGAH"; }
+            if (level === 'hard') { levelBadge.className = "px-3 py-1 rounded-lg text-xs font-bold uppercase tracking-wider bg-purple-100 text-purple-700"; levelBadge.innerText = "AHLI"; }
+
+            lobbyScreen.classList.add('hidden');
+            quizScreen.classList.remove('hidden');
+            
+            resetGameState();
+            loadQuestion();
+        }
+
+        function resetGameState() {
+            questionIndex = 0;
+            score = 0;
+            streak = 0;
+            correctCount = 0;
+            wrongCount = 0;
+            scoreDisplay.innerText = "0";
+            updateStreakUI();
+        }
+
+        function loadQuestion() {
+            const data = currentQuestions[questionIndex];
+            
+            // Update Text
+            questionText.innerText = data.q;
+            questionCount.innerText = `${questionIndex + 1}/${currentQuestions.length}`;
+            
+            // Update Progress Bar
+            const progress = ((questionIndex) / currentQuestions.length) * 100;
+            progressBar.style.width = `${progress}%`;
+
+            // Reset Timer
+            resetTimer();
+
+            // Clear Previous
+            optionsContainer.innerHTML = '';
+            feedbackArea.classList.add('hidden');
+            nextBtn.classList.add('hidden');
+
+            // Render Options
+            data.options.forEach((opt, index) => {
+                const btn = document.createElement('button');
+                btn.className = "option-card w-full text-left p-4 rounded-xl border-2 border-gray-200 hover:border-blue-400 bg-white font-semibold text-gray-700 transition flex items-center gap-3";
+                btn.innerHTML = `<span class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-sm font-bold text-gray-500">${String.fromCharCode(65 + index)}</span> ${opt}`;
+                btn.onclick = () => checkAnswer(index, btn);
+                optionsContainer.appendChild(btn);
+            });
+        }
+
+        // --- TIMER LOGIC ---
+        function resetTimer() {
+            clearInterval(timerInterval);
+            timeLeft = 30; // 30 detik per soal
+            
+            // Buat elemen timer jika belum ada (disisipkan di header quiz)
+            let timerDisplay = document.getElementById('timer-display');
+            if (!timerDisplay) {
+                const headerStats = document.querySelector('#quiz-screen > div:first-child > div:first-child');
+                timerDisplay = document.createElement('span');
+                timerDisplay.id = 'timer-display';
+                timerDisplay.className = "ml-3 text-xs font-bold text-orange-500 bg-orange-100 px-2 py-1 rounded";
+                headerStats.appendChild(timerDisplay);
+            }
+            timerDisplay.innerHTML = `<i class="fa-solid fa-clock mr-1"></i> ${timeLeft}s`;
+            timerDisplay.classList.remove('text-red-600');
+
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                timerDisplay.innerHTML = `<i class="fa-solid fa-clock mr-1"></i> ${timeLeft}s`;
+                
+                if (timeLeft <= 5) {
+                    timerDisplay.classList.add('text-red-600', 'animate-pulse');
+                }
+
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    handleTimeOut();
+                }
+            }, 1000);
+        }
+
+        function handleTimeOut() {
+            // Waktu habis = Salah
+            const data = currentQuestions[questionIndex];
+            const allButtons = optionsContainer.children;
+
+            // Disable buttons
+            for (let btn of allButtons) {
+                btn.classList.add('disabled');
+                btn.onclick = null;
+            }
+
+            // Highlight correct answer
+            const correctBtn = allButtons[data.correct];
+            if(correctBtn) {
+                correctBtn.classList.add('border-secondary', 'text-secondary', 'bg-green-50');
+            }
+
+            streak = 0;
+            wrongCount++;
+            updateStreakUI();
+
+            // Show Feedback
+            feedbackArea.className = "mt-6 p-4 rounded-xl border-l-4 animate-pop bg-red-50 border-wrong text-red-800 block";
+            feedbackTitle.innerHTML = `<i class="fa-solid fa-hourglass-end mr-2"></i>Waktu Habis!`;
+            feedbackText.innerText = data.desc;
+            
+            nextBtn.classList.remove('hidden');
+        }
+
+        function checkAnswer(selectedIndex, btnElement) {
+            clearInterval(timerInterval); // Stop timer
+
+            const data = currentQuestions[questionIndex];
+            const allButtons = optionsContainer.children;
+
+            // Disable all buttons
+            for (let btn of allButtons) {
+                btn.classList.add('disabled');
+                btn.onclick = null;
+            }
+
+            const isCorrect = selectedIndex === data.correct;
+
+            if (isCorrect) {
+                btnElement.classList.remove('border-gray-200', 'hover:border-blue-400');
+                btnElement.classList.add('border-secondary', 'bg-green-50', 'text-secondary');
+                btnElement.querySelector('span').classList.add('bg-secondary', 'text-white');
+                
+                streak++;
+                correctCount++;
+                
+                // Score Calculation (Base + Time Bonus + Streak)
+                const timeBonus = Math.floor(timeLeft * 2); // Bonus point for speed
+                const streakBonus = streak > 1 ? (streak * 10) : 0;
+                const points = pointMultiplier + timeBonus + streakBonus;
+                score += points;
+
+                feedbackArea.className = "mt-6 p-4 rounded-xl border-l-4 animate-pop bg-green-50 border-secondary text-green-800 block";
+                feedbackTitle.innerHTML = `<i class="fa-solid fa-circle-check mr-2"></i>Benar! (+${points})`;
+                
+                confetti({ particleCount: 50, spread: 60, origin: { y: 0.7 } });
+
+            } else {
+                btnElement.classList.remove('border-gray-200', 'hover:border-blue-400');
+                btnElement.classList.add('border-wrong', 'bg-red-50', 'text-wrong', 'animate-shake');
+                btnElement.querySelector('span').classList.add('bg-wrong', 'text-white');
+
+                const correctBtn = allButtons[data.correct];
+                correctBtn.classList.add('border-secondary', 'text-secondary');
+
+                streak = 0;
+                wrongCount++;
+
+                feedbackArea.className = "mt-6 p-4 rounded-xl border-l-4 animate-pop bg-red-50 border-wrong text-red-800 block";
+                feedbackTitle.innerHTML = `<i class="fa-solid fa-circle-xmark mr-2"></i>Salah!`;
+            }
+
+            scoreDisplay.innerText = score;
+            feedbackText.innerText = data.desc;
+            updateStreakUI();
+            
+            nextBtn.classList.remove('hidden');
+        }
+
+        function updateStreakUI() {
+            if (streak > 1) {
+                streakBadge.classList.remove('hidden');
+                streakCount.innerText = streak;
+            } else {
+                streakBadge.classList.add('hidden');
+            }
+        }
+
+        function nextQuestion() {
+            questionIndex++;
+            if (questionIndex < currentQuestions.length) {
+                loadQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        function showResults() {
+            clearInterval(timerInterval);
+            quizScreen.classList.add('hidden');
+            resultScreen.classList.remove('hidden');
+
+            document.getElementById('final-score').innerText = score;
+            document.getElementById('total-correct').innerText = correctCount;
+            document.getElementById('total-wrong').innerText = wrongCount;
+
+            const resultMessage = document.getElementById('result-message');
+            const resultIcon = document.getElementById('result-icon');
+
+            // Grade based on correct count
+            if (correctCount === currentQuestions.length) {
+                resultIcon.innerText = "👑";
+                resultMessage.innerText = "Sempurna! Kamu adalah master finansial sejati.";
+                var duration = 3 * 1000;
+                var animationEnd = Date.now() + duration;
+                var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
+                var interval = setInterval(function() {
+                    var timeLeft = animationEnd - Date.now();
+                    if (timeLeft <= 0) return clearInterval(interval);
+                    var particleCount = 50 * (timeLeft / duration);
+                    confetti(Object.assign({}, defaults, { particleCount, origin: { x: Math.random() - 0.2, y: Math.random() - 0.2 } }));
+                }, 250);
+            } else if (correctCount >= 7) {
+                resultIcon.innerText = "🎉";
+                resultMessage.innerText = "Hebat! Pemahamanmu sudah sangat baik.";
+                confetti();
+            } else if (correctCount >= 4) {
+                resultIcon.innerText = "👍";
+                resultMessage.innerText = "Cukup bagus, tapi masih perlu belajar lagi.";
+            } else {
+                resultIcon.innerText = "📚";
+                resultMessage.innerText = "Jangan menyerah! Coba baca modul materi lagi.";
+            }
+        }
+
+        function resetQuiz() {
+            resultScreen.classList.add('hidden');
+            lobbyScreen.classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>
